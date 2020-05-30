@@ -39,6 +39,7 @@ func TestInsert(t *testing.T) {
 		struct{}{},
 		new(struct{}),
 		set.New('a', 'b'),
+		nil,
 	}
 	require.NotPanics(t, func() {
 		set.New(inserts...)
@@ -46,4 +47,24 @@ func TestInsert(t *testing.T) {
 	require.Panics(t, func() {
 		set.New([]interface{}{nil})
 	})
+}
+
+func TestDelete(t *testing.T) {
+	inserts := []interface{}{
+		1,
+		1.8,
+		1 + 10i,
+		"oh damn",
+		struct{}{},
+		new(struct{}),
+	}
+	require.NotPanics(t, func() {
+		s := set.New(inserts...)
+		for _, i := range inserts {
+			assert.True(t, s.HasItem(i))
+			s.Delete(i)
+			assert.False(t, s.HasItem(i))
+		}
+	})
+
 }

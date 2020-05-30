@@ -64,11 +64,11 @@ func Union(a, b Set) Set {
 	case emptyA && emptyB:
 		return nil
 	case emptyA && !emptyB:
-		return New(b)
+		return New(b.Items()...)
 	case !emptyA && emptyB:
-		return New(a)
+		return New(a.Items()...)
 	}
-	return New(a, b)
+	return New(append(a.Items(), b.Items()...)...)
 }
 
 // Intersection returns all the values that are found
@@ -93,7 +93,7 @@ func Subtract(a, b Set) Set {
 		return nil
 	}
 	if IsEmpty(b) {
-		return New(a.Items()...)
+		return New(a)
 	}
 	s := New()
 	for _, i := range b.Items() {

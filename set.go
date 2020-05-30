@@ -5,8 +5,10 @@ package set
 type Set interface {
 
 	// Insert will store item internally
-	// panics when an item is an array, slice or map
 	Insert(item interface{})
+
+	// Delete removes the item if it exists from the set
+	Delete(item interface{})
 
 	// HasItem will check to see item exists within the set
 	HasItem(item interface{}) bool

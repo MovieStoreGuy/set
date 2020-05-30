@@ -2,7 +2,6 @@ package set
 
 import (
 	"fmt"
-	"reflect"
 	"sync"
 )
 
@@ -24,19 +23,15 @@ type setImpl struct {
 }
 
 func (s *setImpl) Insert(item interface{}) {
-	switch reflect.ValueOf(item).Kind() {
-	case reflect.Array, reflect.Slice, reflect.Map:
-		panic("unsupported kind used")
-	}
-	if a, ok := item.(Set); ok {
-		for _, i := range a.Items() {
-			s.Insert(i)
-		}
-		return
-	}
 	s.rw.Lock()
 	defer s.rw.Unlock()
 	s.set[item] = struct{}{}
+}
+
+func (s *setImpl) Delete(item interface{}) {
+	s.rw.Lock()
+	defer s.rw.Unlock()
+	delete(s.set, item)
 }
 
 func (s *setImpl) HasItem(item interface{}) bool {
