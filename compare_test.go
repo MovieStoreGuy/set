@@ -1,6 +1,7 @@
 package set_test
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -79,16 +80,16 @@ func TestIntersection(t *testing.T) {
 
 func TestSubtraction(t *testing.T) {
 	t.Parallel()
-	values := []struct{ a, b set.Set }{
-		{nil, nil},
-		{nil, set.New('a')},
-		{set.New('a'), nil},
-		{set.New('a'), set.New('b')},
+	values := []struct{ a, b, c set.Set }{
+		{nil, nil, set.New()},
+		{set.New('a'), set.New('a'), set.New()},
+		{set.New('a'), set.New('b'), set.New('a')},
+		{set.New('a', 'b', 'c'), set.New('c', 'd', 'e'), set.New('a', 'b')},
 	}
 
 	for _, v := range values {
-		u := set.Union(v.a, v.b)
-		assert.True(t, set.Equal(set.Subtract(v.a, u), v.b))
-		assert.True(t, set.Equal(set.Subtract(v.b, u), v.a))
+		f := set.Subtract(v.a, v.b)
+		assert.NotNil(t, f)
+		assert.True(t, set.Equal(f, v.c), fmt.Sprintf("a:%v - b:%v = c:%v, got: %v", v.a, v.b, v.c, f))
 	}
 }

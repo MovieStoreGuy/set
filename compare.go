@@ -90,14 +90,14 @@ func Intersection(a, b Set) Set {
 // contained within a
 func Subtract(a, b Set) Set {
 	if IsEmpty(a) {
-		return nil
+		return New()
 	}
 	if IsEmpty(b) {
 		return New(a)
 	}
 	s := New()
-	for _, i := range b.Items() {
-		if !a.HasItem(i) {
+	for _, i := range a.Items() {
+		if !b.HasItem(i) {
 			s.Insert(i)
 		}
 	}
